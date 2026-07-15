@@ -11,7 +11,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-OUT="book.pdf"
+OUT="深入理解-AI-Agent-设计原理与工程实践-v1.0.pdf"
 CHAPTERS=(
     introduction.md
     chapter1.md
