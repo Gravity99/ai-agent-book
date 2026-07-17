@@ -79,12 +79,26 @@ git clone https://github.com/PRIME-RL/SimpleVLA-RL.git                 chapter7/
 git clone https://github.com/browser-use/browser-use.git               chapter9/browser-use
 git clone https://github.com/anthropics/claude-quickstarts.git         chapter9/claude-quickstarts
 
-# 第 10 章 · 双 Agent 架构（已独立为 TalkAct 项目）
+# 第 10 章 · 双 Agent 架构（已独立为 TalkAct 项目）+ 斯坦福 AI 小镇
 git clone https://github.com/19PINE-AI/TalkAct.git                     chapter10/use-computer-while-calling
+git clone https://github.com/joonspk-research/generative_agents.git    chapter10/generative_agents             # 实验 10-7 斯坦福 AI 小镇
 ```
 
 > 各项目 README 中如标注了特定提交（commit），请按其说明 `git checkout` 到对应版本，以保证复现结果一致。
 > 第 10 章 `use-computer-while-calling` 已发展为持续维护的独立仓库 [19PINE-AI/TalkAct](https://github.com/19PINE-AI/TalkAct)，本仓库仅保留一份指向它的说明文档（`chapter10/use-computer-while-calling/README.md`）。
+
+**依赖真实硬件 / 外部环境的实验（无本仓库代码，指向上游文档）：**
+
+- **实验 9-8 / 9-9 · XLeRobot 遥操作与 LLM Agent 控制**：需 SO-100/XLeRobot 机械臂，按上游文档操作 —— [Teleop](https://xlerobot.readthedocs.io/en/latest/software/getting_started/XLeRobot_teleop.html) · [LLM Agent](https://xlerobot.readthedocs.io/en/latest/software/getting_started/LLM_agent.html)
+- **实验 9-10 · RGB 零样本 Sim2Real 抓取**：[`StoneT2000/lerobot-sim2real`](https://github.com/StoneT2000/lerobot-sim2real)（仿真训练部分可纯 GPU 完成，真实部署需 SO-100 机械臂）
+- **实验 6-11 · OpenVLA + RoboTwin2 仿真评估**：VLA 训练/环境依赖见 `chapter7/SimpleVLA-RL` 的 README（其中说明 OpenVLA、RoboTwin2 的获取与配置）
+
+**读者练习类实验（书中作为练习题给出，复用已文档化的既有项目，无专属目录）：**
+
+- **实验 5-12 · 能创造 Agent 的 Agent**：基于 `chapter5/coding-agent` 自举扩展
+- **实验 6-2 / 6-3 / 6-4 / 6-9**：分别为人肉基准、记忆评估、JSON Cards vs RAG、记忆选型——改造复用第 3 章 `user-memory` / `user-memory-evaluation` / `contextual-retrieval` 等项目
+- **实验 7-8 · Prompt 蒸馏**：落地实现见第 8 章 `chapter8/prompt-distillation`（跨章复用）
+- **实验 7-9 · CoT 蒸馏 `[扩展]`**：书中给出实验设计与验收标准，作为读者扩展实验，暂无专属代码
 
 ## 🚀 第 1 章 · Agent 基础知识
 
