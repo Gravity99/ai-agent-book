@@ -133,13 +133,15 @@ class MultimodalTools:
     async def _analyze_with_openai(self, content: MultimodalContent, query: str) -> str:
         """Use OpenAI (or OpenRouter fallback) for content analysis"""
         cfg = self.agent.config
-        if cfg.openai_api_key:
-            client = AsyncOpenAI(api_key=cfg.openai_api_key)
-            model = "gpt-4o"
-        else:
-            # Universal OpenRouter fallback (no direct OpenAI key)
+        # 视觉默认 gpt-5.6-luna（视觉可用）；直连 gpt-5.6 需组织实名，故有 OpenRouter key 时优先走 OpenRouter
+        if cfg.openrouter_api_key:
             client = AsyncOpenAI(api_key=cfg.openrouter_api_key, base_url=cfg.openrouter_base_url)
-            model = _openrouter_model_id("gpt-4o")
+            model = _openrouter_model_id("gpt-5.6-luna")
+        elif cfg.openai_api_key:
+            client = AsyncOpenAI(api_key=cfg.openai_api_key)
+            model = "gpt-5.6-luna"
+        else:
+            raise RuntimeError("需要 OPENAI_API_KEY 或 OPENROUTER_API_KEY 才能进行视觉分析")
 
         messages = [{
             "role": "user",
@@ -661,10 +663,16 @@ class MultimodalAgent:
         
     async def _extract_image_to_text(self, content: MultimodalContent) -> str:
         """Extract image to text description"""
-        # Use GPT-4o, Doubao, or (fallback) OpenRouter for image description
-        if self.config.openai_api_key:
+        # 图像转文本：gpt-5.6-luna（优先 OpenRouter，直连 5.6 需组织实名）/ Doubao / OpenRouter 兜底
+        if self.config.openrouter_api_key:
+            client = AsyncOpenAI(
+                api_key=self.config.openrouter_api_key,
+                base_url=self.config.openrouter_base_url
+            )
+            model = _openrouter_model_id("gpt-5.6-luna")
+        elif self.config.openai_api_key:
             client = AsyncOpenAI(api_key=self.config.openai_api_key)
-            model = "gpt-4o"
+            model = "gpt-5.6-luna"
         elif self.config.doubao_api_key:
             client = AsyncOpenAI(
                 api_key=self.config.doubao_api_key,
@@ -672,11 +680,7 @@ class MultimodalAgent:
             )
             model = "Doubao-1.6"
         else:
-            client = AsyncOpenAI(
-                api_key=self.config.openrouter_api_key,
-                base_url=self.config.openrouter_base_url
-            )
-            model = _openrouter_model_id("gpt-4o")
+            raise RuntimeError("需要 OPENAI_API_KEY / OPENROUTER_API_KEY / DOUBAO_API_KEY 才能进行图像转文本")
             
         messages = [{
             "role": "user",

@@ -161,7 +161,7 @@ async def compare_models(file_path: str, query: str):
     content = MultimodalContent(type=content_type, path=file_path)
     
     # Test with different models
-    models = ["gemini-3.5-flash", "gpt-4o", "doubao-1.6"]
+    models = ["gemini-3.5-flash", "gpt-5.6-luna", "doubao-1.6"]
     
     for model in models:
         print("\n" + "-"*60)
@@ -176,7 +176,7 @@ async def compare_models(file_path: str, query: str):
             if model == "gemini-3.5-flash" and not config.gemini_api_key:
                 print("Skipping: Gemini API key not configured")
                 continue
-            elif model in ["gpt-4o", "gpt-5"] and not config.openai_api_key:
+            elif model in ["gpt-5.6-luna", "gpt-5"] and not (config.openai_api_key or config.openrouter_api_key):
                 print("Skipping: OpenAI API key not configured")
                 continue
             elif model == "doubao-1.6" and not config.doubao_api_key:

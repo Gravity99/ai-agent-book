@@ -11,13 +11,13 @@ from enum import Enum
 def _openrouter_model_id(model) -> str:
     """Map a provider-native model name to an OpenRouter model id, used by the
     universal OpenRouter fallback. An explicit OPENROUTER_MODEL env var wins.
-    Vision-capable default (gpt-4o) so image analysis still works."""
+    Vision-capable default (gpt-5.6-luna) so image analysis still works."""
     override = os.getenv("OPENROUTER_MODEL")
     if override:
         return override
     m = (model or "").strip()
     if not m:
-        return "openai/gpt-4o"
+        return "openai/gpt-5.6-luna"
     if "/" in m:
         return m
     ml = m.lower()
@@ -28,7 +28,7 @@ def _openrouter_model_id(model) -> str:
     if ml.startswith("gemini"):
         return "google/" + m  # e.g. gemini-3.5-flash -> google/gemini-3.5-flash
     # Provider-native ids (doubao-*/qwen/...) -> a widely-available vision model.
-    return "openai/gpt-4o"
+    return "openai/gpt-5.6-luna"
 
 
 class ExtractionMode(Enum):
@@ -85,9 +85,9 @@ class Config:
                 api_key=self.openai_api_key,
                 supports_native_multimodal=True
             ),
-            "gpt-4o": ModelConfig(
+            "gpt-5.6-luna": ModelConfig(
                 provider=Provider.OPENAI,
-                model_name="gpt-4o",
+                model_name="gpt-5.6-luna",
                 api_key=self.openai_api_key,
                 supports_native_multimodal=True
             ),
@@ -151,7 +151,9 @@ class Config:
         """Return (client_kwargs, model_name) for an OpenAI-compatible call,
         applying the universal OpenRouter fallback when needed."""
         provider = model_config.provider
-        if self.use_openrouter(provider):
+        _m = (model_config.model_name or "").lower()
+        _prefer_or = bool(self.openrouter_api_key) and _m.startswith("gpt-5")  # 直连 gpt-5.6 需组织实名，优先 OpenRouter
+        if _prefer_or or self.use_openrouter(provider):
             return (
                 {"api_key": self.openrouter_api_key, "base_url": self.openrouter_base_url},
                 _openrouter_model_id(model_config.model_name),
