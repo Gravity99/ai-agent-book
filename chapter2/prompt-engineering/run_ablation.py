@@ -179,7 +179,21 @@ def parse_args():
     # Set default user model provider based on user model if not specified
     if args.user_model_provider is None:
         args.user_model_provider = "openrouter" if "/" in args.user_model else "openai"
-    
+
+    # Universal fallback: if the resolved provider is OpenAI-direct but
+    # OPENAI_API_KEY is missing while OPENROUTER_API_KEY is present, route the
+    # bare gpt-* / o1-* id through OpenRouter (prefix "openai/"). Preserves the
+    # default (OpenAI-direct) behavior whenever OPENAI_API_KEY is set.
+    if not os.environ.get("OPENAI_API_KEY") and os.environ.get("OPENROUTER_API_KEY"):
+        if args.model_provider == "openai":
+            args.model_provider = "openrouter"
+            if "/" not in args.model:
+                args.model = "openai/" + args.model
+        if args.user_model_provider == "openai":
+            args.user_model_provider = "openrouter"
+            if "/" not in args.user_model:
+                args.user_model = "openai/" + args.user_model
+
     return args
 
 

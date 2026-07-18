@@ -70,6 +70,10 @@ cp env.example .env
 export KIMI_API_KEY='your-api-key-here'
 ```
 
+> **通用回退（OpenRouter）**：未设置 `KIMI_API_KEY` 时，只要配置了
+> `OPENROUTER_API_KEY`，实验会自动改走 OpenRouter（`kimi-*` 会映射为
+> `moonshotai/kimi-k2`）。设置了 `KIMI_API_KEY` 时行为完全不变。
+
 ### Basic Usage
 
 ```bash

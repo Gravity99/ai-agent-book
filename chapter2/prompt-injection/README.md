@@ -42,9 +42,13 @@
 
 ```bash
 pip install -r requirements.txt
-cp env.example .env    # 填入 OPENAI_API_KEY（仅使用 OpenAI 官方接口）
+cp env.example .env    # 填入 OPENAI_API_KEY（OpenAI 官方接口）
 python demo.py         # 默认跑完全部 3×4=12 个组合，每组合 4 次
 ```
+
+> **通用回退（OpenRouter）**：未设置 `OPENAI_API_KEY` 时，只要配置了
+> `OPENROUTER_API_KEY`，程序会自动改走 OpenRouter（`gpt-*` 会映射为 `openai/…`）。
+> 设置了 `OPENAI_API_KEY` 时行为完全不变。
 
 程序会依次跑完被选中的组合，最后打印一张 **攻击 × 防御** 的成功率矩阵。
 

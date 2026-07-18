@@ -490,10 +490,13 @@ def main():
         run_report(args.input, args.cache_price_ratio)
         return
 
-    # Get API key
-    api_key = args.api_key or os.getenv("MOONSHOT_API_KEY")
+    # Get API key. 优先 Moonshot/Kimi 官方 key；缺失时回退到 OPENROUTER_API_KEY
+    # （KVCacheAgent 会据此自动切换到 OpenRouter 端点并映射模型名）。
+    api_key = (args.api_key or os.getenv("MOONSHOT_API_KEY")
+               or os.getenv("KIMI_API_KEY") or os.getenv("OPENROUTER_API_KEY"))
     if not api_key:
-        logger.error("请通过 --api-key 或环境变量 MOONSHOT_API_KEY 提供 API Key；"
+        logger.error("请通过 --api-key 或环境变量 MOONSHOT_API_KEY / KIMI_API_KEY / "
+                     "OPENROUTER_API_KEY 提供 API Key；"
                      "若只想查看已有结果，可使用 --report（无需 API Key）。")
         sys.exit(1)
 

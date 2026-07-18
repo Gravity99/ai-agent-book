@@ -103,6 +103,10 @@ pip install -r requirements.txt
 export MOONSHOT_API_KEY="your-api-key-here"
 ```
 
+> **通用回退（OpenRouter）**：未设置 `MOONSHOT_API_KEY` / `KIMI_API_KEY` 时，只要
+> 配置了 `OPENROUTER_API_KEY`，实验会自动改走 OpenRouter（`kimi-*` 会映射为
+> `moonshotai/kimi-k2`）。设置了 Moonshot key 时行为完全不变。
+
 ## 📖 Usage
 
 ### Interactive Mode (Default)

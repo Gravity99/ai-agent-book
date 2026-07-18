@@ -93,7 +93,7 @@ def get_sample_task() -> str:
 def execute_single_task(task: str, config: SystemHintConfig = None, verbose: bool = False,
                         provider: str = "kimi", model: str = None):
     """Execute a single task with the agent"""
-    api_key = os.getenv("KIMI_API_KEY")
+    api_key = os.getenv("KIMI_API_KEY") or os.getenv("MOONSHOT_API_KEY") or os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("❌ Error: Please set KIMI_API_KEY environment variable")
         print("   export KIMI_API_KEY='your-api-key-here'")
@@ -131,7 +131,7 @@ def interactive_mode():
     """Run the agent in interactive mode"""
     print_section("Interactive Mode - System-Hint Agent")
     
-    api_key = os.getenv("KIMI_API_KEY")
+    api_key = os.getenv("KIMI_API_KEY") or os.getenv("MOONSHOT_API_KEY") or os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("❌ Error: Please set KIMI_API_KEY environment variable")
         print("   export KIMI_API_KEY='your-api-key-here'")
@@ -217,7 +217,7 @@ def demo_basic_features():
     """Demonstrate basic system hint features"""
     print_section("Demo: Basic System Hint Features")
     
-    api_key = os.getenv("KIMI_API_KEY")
+    api_key = os.getenv("KIMI_API_KEY") or os.getenv("MOONSHOT_API_KEY") or os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("❌ Please set KIMI_API_KEY environment variable")
         return
@@ -253,7 +253,7 @@ def demo_tool_loop_prevention():
     """Demonstrate tool call loop prevention"""
     print_section("Demo: Tool Call Loop Prevention")
     
-    api_key = os.getenv("KIMI_API_KEY")
+    api_key = os.getenv("KIMI_API_KEY") or os.getenv("MOONSHOT_API_KEY") or os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("❌ Please set KIMI_API_KEY environment variable")
         return
@@ -290,7 +290,7 @@ def demo_comparison():
     """Compare with and without system hints"""
     print_section("Demo: System Hints Comparison")
     
-    api_key = os.getenv("KIMI_API_KEY")
+    api_key = os.getenv("KIMI_API_KEY") or os.getenv("MOONSHOT_API_KEY") or os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("❌ Please set KIMI_API_KEY environment variable")
         return

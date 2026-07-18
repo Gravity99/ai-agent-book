@@ -29,8 +29,9 @@ Anthropic key 无效，本项目**自建了一套同构的 Skills 机制**来复
 机制一一对应，只是把「Claude 内置的 Skill 加载器」换成了几个显式的读取/执行工具，
 从而在没有 Anthropic 访问权限时，依然能真实演示渐进式披露的三层加载过程。
 
-> 说明：本项目不使用 OPENROUTER / ANTHROPIC / DEEPSEEK / SILICONFLOW 等已失效的
-> 供应商，只依赖 OpenAI。
+> 说明：本项目主用 OpenAI（默认模型 gpt-4o-mini）。**通用回退**：未设置
+> `OPENAI_API_KEY` 时，只要配置了 `OPENROUTER_API_KEY`，会自动改走 OpenRouter
+> （`gpt-*` 映射为 `openai/…`）。设置了 `OPENAI_API_KEY` 时行为完全不变。
 
 ## 渐进式披露的三层结构
 

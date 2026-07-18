@@ -252,7 +252,11 @@ class Agent:
 def make_client(
     model: str | None = None, base_url: str | None = None
 ) -> tuple[OpenAI, str]:
-    """从环境变量构造 OpenAI 客户端。仅使用 OPENAI_API_KEY。
+    """从环境变量构造 OpenAI 客户端。
+
+    优先使用 OPENAI_API_KEY（官方直连，保持默认行为不变）；若未配置且存在
+    OPENROUTER_API_KEY，则自动回退到 OpenRouter（base_url=openrouter.ai，
+    模型名 gpt-*/o1-* 会被映射为 openai/…）；两者皆无则给出清晰错误。
 
     model / base_url 若显式传入则优先于环境变量，便于命令行覆盖。
     """
@@ -263,19 +267,22 @@ def make_client(
     except ImportError:
         pass
 
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise RuntimeError(
-            "未找到 OPENAI_API_KEY，请在环境变量或 .env 中设置（参考 env.example）。"
-        )
-    model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    from openrouter_fallback import resolve_llm
+
+    requested_model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     # 允许自定义 base_url（默认官方），但请勿指向已失效的第三方网关。
-    base_url = base_url or os.getenv("OPENAI_BASE_URL") or None
+    primary_base_url = base_url or os.getenv("OPENAI_BASE_URL") or None
+    # OPENAI_API_KEY 存在 -> 官方直连；否则回退 OPENROUTER_API_KEY。
+    api_key, resolved_base_url, model = resolve_llm(
+        model=requested_model,
+        primary_keys=("OPENAI_API_KEY",),
+        primary_base_url=primary_base_url,
+    )
     # timeout + 自动重试：应对偶发的网络抖动 / 限流 / 5xx，避免单次瞬时错误
     # 直接让整张成功率矩阵作废。
     client = OpenAI(
         api_key=api_key,
-        base_url=base_url,
+        base_url=resolved_base_url,
         timeout=60.0,
         max_retries=2,
     )

@@ -75,6 +75,9 @@ python run_ablation.py \
 # 说明：默认使用 OpenAI 直连（provider=openai），需设置 OPENAI_API_KEY。
 #       如需走 OpenRouter，把模型写成带斜杠的 id（如 openai/gpt-5），
 #       脚本会自动选择 openrouter provider（需 OPENROUTER_API_KEY）。
+#       通用回退：即使模型是 bare id（如 gpt-4o-mini），只要未设 OPENAI_API_KEY
+#       而设了 OPENROUTER_API_KEY，脚本会自动把它前缀成 openai/gpt-4o-mini 并
+#       切到 openrouter provider。
 ```
 
 跑完后会打印如下成功率对比表。下面是一次**真实运行**的输出（`--model gpt-4o --env airline --end-index 4`，即每组仅 4 个任务的冒烟样本），仅用于展示表格形态：

@@ -102,11 +102,24 @@ class SystemHintAgent:
         
         # Configure client based on provider
         if self.provider == "kimi" or self.provider == "moonshot":
+            # 默认 Moonshot/Kimi 官方端点；若传入 OpenRouter key（sk-or-…）则自动
+            # 回退到 OpenRouter，并把 kimi-* 映射为 moonshotai/kimi-k2。
+            from openrouter_fallback import (
+                OPENROUTER_BASE_URL,
+                is_openrouter_key,
+                map_model_to_openrouter,
+            )
+            resolved_model = model or "kimi-k3"
+            if is_openrouter_key(api_key):
+                base_url = OPENROUTER_BASE_URL
+                resolved_model = map_model_to_openrouter(resolved_model)
+            else:
+                base_url = "https://api.moonshot.cn/v1"
             self.client = OpenAI(
                 api_key=api_key,
-                base_url="https://api.moonshot.cn/v1"
+                base_url=base_url
             )
-            self.model = model or "kimi-k3"
+            self.model = resolved_model
         else:
             raise ValueError(f"Unsupported provider: {provider}")
         

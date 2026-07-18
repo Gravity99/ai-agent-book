@@ -360,9 +360,21 @@ class KVCacheAgent:
             root_dir: Root directory for file operations
             verbose: If True, log detailed information
         """
+        # 默认走 Moonshot/Kimi 官方端点；若传入的是 OpenRouter key（sk-or-…），
+        # 则自动回退到 OpenRouter，并把 kimi-* 模型名映射为 moonshotai/kimi-k2。
+        from openrouter_fallback import (
+            OPENROUTER_BASE_URL,
+            is_openrouter_key,
+            map_model_to_openrouter,
+        )
+        if is_openrouter_key(api_key):
+            base_url = OPENROUTER_BASE_URL
+            model = map_model_to_openrouter(model)
+        else:
+            base_url = "https://api.moonshot.cn/v1"
         self.client = OpenAI(
             api_key=api_key,
-            base_url="https://api.moonshot.cn/v1"
+            base_url=base_url
         )
         self.model = model
         self.mode = mode
