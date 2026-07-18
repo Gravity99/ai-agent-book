@@ -228,47 +228,52 @@ Agent 执行长任务，用户发"取消"。框架立即取消当前执行流并
 
 ## 五、LLM 场景真实运行输出（关键片段）
 
-> 以下均为真实调用 `gpt-4o-mini` 的输出节选（时间戳为真实秒，需配置 API key 复现）。
+> 以下均为真实调用 `gpt-5.6-luna`（OpenAI 兼容接口）的输出节选（时间戳为真实秒，需配置 API key 复现）。
 
 **场景 1（异步执行 + 即时提问）**
 ```
-[ 2.25s] TASK  | 启动异步任务 T1: `python analyze_logs.py` (速度 4%/模拟秒)
-[ 3.34s] AGENT | 任务已在后台启动。请稍等，待任务完成后我会给您分析结论。
-[ 6.29s] AGENT | 当前时间是 2026-07-17 22:07:14。        ← 任务仍在跑，先即时回应
-[ 8.02s] TRAJ  | + async.result  异步完成 T1              ← 真实结果作为新事件注入
-[11.03s] AGENT | 日志分析完成，结果如下：...             ← 再呈现分析
+[ 3.97s] AGENT | 任务已在后台启动（task_id：T1）。完成后我会根据日志分析结果给出结论。
+[ 4.96s] TASK  | T1 `python analyze_logs.py` 进度 22%      ← 任务仍在后台跑
+[ 5.19s] TOOL  | get_current_time -> 2026-07-18 13:43:30  ← 即时提问先回应
+[ 6.91s] AGENT | 现在是 2026 年 7 月 18 日 13:43:30。
+[12.19s] TRAJ  | + async.result  异步完成 T1               ← 真实结果作为新事件注入
+[16.67s] AGENT | 日志分析已完成，结论如下：共扫描 12,840 条记录…  ← 再呈现分析
 ```
 
 **场景 2（批量处理）**
 ```
-[7.78s] SYSTEM | 异步结果到达，批量处理 2 条积压的非紧急事件
-[7.78s] TRAJ   | + async.result   异步完成 T1
-[7.78s] TRAJ   | + user.input     记得最后用日语回复
-[7.78s] TRAJ   | + user.input     把结果整理成一个网页(HTML)
+[ 1.50s] SYSTEM | 事件进入排队缓冲（当前积压 1 条）
+[ 1.90s] SYSTEM | 事件进入排队缓冲（当前积压 2 条）
+[12.05s] TASK   | T1 完成 ✅
+[12.05s] SYSTEM | 异步结果到达，批量处理 2 条积压的非紧急事件
+[12.06s] TRAJ   | + async.result   异步完成 T1
+[12.06s] TRAJ   | + user.input     记得最后用日语回复
+[12.06s] TRAJ   | + user.input     把结果整理成一个网页(HTML)
 ...
-AGENT | <html>...<h1>日志分析结果</h1>... 結果は成功に生成されました。
+[22.38s] AGENT  | <!DOCTYPE html>…<h2>分析結論</h2>… （批量指令一次性满足：日语 + HTML）
 ```
 
 **场景 3（打断）**
 ```
-[4.00s] USER   | (interrupt) 取消
-[4.00s] TASK   | T1 已被取消 🛑（进度停在 32%）
-[4.00s] TRAJ   | + user.interrupt  用户打断：取消
-[4.00s] TRAJ   | + system.note     打断回执，取消任务 ['T1']
-[4.81s] AGENT  | 已取消后台任务。
+[ 2.40s] TASK   | 启动异步任务 T1: `python analyze_logs.py` (速度 4%/模拟秒)
+[ 4.00s] USER   | (interrupt) 取消
+[ 4.00s] TASK   | T1 已被取消 🛑（进度停在 14%）
+[ 4.00s] TRAJ   | + user.interrupt  用户打断：取消
+[ 4.00s] TRAJ   | + system.note     打断回执，取消任务 ['T1']
+[ 5.04s] AGENT  | 已停止后台任务 T1。
 ```
 
 **场景 4（并行 + 状态查询 + 按 50% 阈值取消 + 整合报告）**
 ```
-[ 3.46s] TASK | 启动异步任务 T1: `python analyze_fast.py` (速度 3%/模拟秒)
-[ 3.46s] TASK | 启动异步任务 T2: `python analyze_mid.py`  (速度 2%/模拟秒)
-[ 3.46s] TASK | 启动异步任务 T3: `python analyze_slow.py` (速度 1%/模拟秒)
-[17.09s] TASK | T1 完成 ✅                               ← 最快脚本先完成
-[19.81s] TOOL | query_task(T2) -> running 80%           ← 查询其余两个进度
-[19.81s] TOOL | query_task(T3) -> running 40%
-[20.99s] TOOL | cancel_task(T3) -> 已取消 (进度 43%)     ← 未过 50%，取消
-[23.50s] TASK | T2 完成 ✅
-AGENT | 现在所有分析脚本的结果已完成，整合报告如下：### 分析报告 ...
+[ 2.82s] TASK | 启动异步任务 T1: `python analyze_fast.py` (速度 3%/模拟秒)
+[ 2.82s] TASK | 启动异步任务 T2: `python analyze_mid.py`  (速度 2%/模拟秒)
+[ 2.82s] TASK | 启动异步任务 T3: `python analyze_slow.py` (速度 1%/模拟秒)
+[16.47s] TASK | T1 完成 ✅                               ← 最快脚本先完成
+[19.84s] TOOL | query_task(T2) -> running 84%           ← 查询其余两个进度
+[19.84s] TOOL | query_task(T3) -> running 42%
+[21.93s] TOOL | cancel_task(T3) -> 已取消 (进度 47%)     ← 未过 50%，取消
+[22.89s] TASK | T2 完成 ✅
+[26.50s] AGENT | ## 分析汇总报告 … analyze_slow.py：已取消（未超 50%）…
 ```
 
 ---
