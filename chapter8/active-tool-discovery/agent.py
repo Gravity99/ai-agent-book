@@ -121,8 +121,16 @@ def _run_loop(client, model, system_prompt, task_prompt, available_names,
     finished = False
 
     for _ in range(max_steps):
-        resp = client.chat.completions.create(
-            model=model, messages=messages, temperature=0)
+        try:
+            resp = client.chat.completions.create(
+                model=model, messages=messages, temperature=0)
+        except Exception as e:
+            # 部分推理型模型（如 gpt-5.x）只支持默认 temperature=1，此时退回默认值重试。
+            if "temperature" in str(e):
+                resp = client.chat.completions.create(
+                    model=model, messages=messages)
+            else:
+                raise
         content = resp.choices[0].message.content or ""
         messages.append({"role": "assistant", "content": content})
 
