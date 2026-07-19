@@ -413,7 +413,7 @@ Table 3-3 Three Core Metrics for Retrieval Quality
 
 | Metric | Intuitive Explanation |
 |------|---------|
-| recall@k | The proportion of queries for which a document containing the correct answer appears in the top k retrieval results—answering "Were the right documents found?" It is the metric closest to the RAG requirement: as long as the relevant document enters the context, the LLM has a chance to use it. |
+| recall@k[^ch3-recall] | The proportion of queries for which a document containing the correct answer appears in the top k retrieval results—answering "Were the right documents found?" It is the metric closest to the RAG requirement: as long as the relevant document enters the context, the LLM has a chance to use it. |
 | MRR (Mean Reciprocal Rank) | For each query, take the reciprocal of the rank of the first relevant document, then average across all queries—answering "How high up was the first hit?" Rank 1 gives a score of 1, rank 10 gives only 0.1. |
 | nDCG (normalized Discounted Cumulative Gain) | Comprehensively considers the rank and relevance of all relevant documents; the score discount for relevant documents increases the further down the ranking they appear—answering "What is the overall quality of the sorted list?" |
 

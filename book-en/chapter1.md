@@ -96,7 +96,9 @@ The "Model as Agent" paradigm represents the latest direction in AI Agent develo
 
 The greater the model's autonomous decision-making space, the larger the potential impact of errors, thus requiring more refined constraints, verification, and correction mechanisms to ensure reliability. The true advantage of model vendors is not "making the framework thinner," but being able to co-optimize the model and the surrounding Harness, iterating continuously.
 
-#### Agent Learning Mechanisms: Post-training, In-context Learning, and Externalized LearningEarlier we discussed how models can internalize tool calling as a native capability through reinforcement learning. However, an agent’s learning is not limited to the training phase—some readers, when thinking about agents learning from experience, immediately assume that the model must be trained. In fact, post-training is not the only way for an agent to learn from experience. The learning mechanisms of an agent can be summarized into three complementary paradigms (Figure 1-1):
+#### Agent Learning Mechanisms: Post-training, In-context Learning, and Externalized Learning
+
+Earlier we discussed how models can internalize tool calling as a native capability through reinforcement learning. However, an agent’s learning is not limited to the training phase—some readers, when thinking about agents learning from experience, immediately assume that the model must be trained. In fact, post-training is not the only way for an agent to learn from experience. The learning mechanisms of an agent can be summarized into three complementary paradigms (Figure 1-1):
 
 ![Figure 1-1: Three learning paradigms of an agent](images/fig1-1.svg)
 
@@ -188,7 +190,7 @@ The brilliance of this design lies in the **accumulative nature of the context**
 
 The trajectory is not just a record of execution; it is also a reflection of the agent’s capabilities. By analyzing a large number of trajectories, we can discover agent behavior patterns, optimize decision paths, and improve tool design. Trajectory data can even be summarized into a knowledge base or used to train better agent models through reinforcement learning, achieving a closed-loop optimization of learning from experience.
 
-### Experiment 1.2 ★: Kimi K3 Native Agent Capability
+#### Experiment 1.2 ★: Kimi K3 Native Agent Capability
 
 This experiment demonstrates the native agent capability of **Kimi K3**, embodying the new paradigm of “model as agent.” Kimi K3, released by Moonshot AI in 2026, is a Mixture of Experts (MoE) model with approximately 2.8 trillion parameters—you can think of MoE as an expert team: when faced with different types of problems, the system automatically selects the most suitable experts to answer, without requiring all experts to work simultaneously, thus ensuring both capability and efficiency. It features a 1 million token context window, native visual understanding capabilities, and an always-on “thinking mode”; the model, trained through reinforcement learning, has internalized tool calling as a native capability, enabling it to autonomously make decisions and execute tasks such as web searches.
 

@@ -8,10 +8,11 @@ This repository is the open-source main repository for the book *Deep Understand
 
 The book is available in two languages:
 
-- **English PDF**: [`book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf`](book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf)
 - **Chinese PDF (original / 中文原版)**: [`book/深入理解-AI-Agent-李博杰-v1.1.pdf`](book/深入理解-AI-Agent-李博杰-v1.1.pdf)
+- **English PDF** (community-contributed translation by [@nsdevaraj](https://github.com/nsdevaraj)): [`book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf`](book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf)
+- **Tamil PDF** (community-contributed translation by [@nsdevaraj](https://github.com/nsdevaraj)): [`book-ta/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1-ta.pdf`](book-ta/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1-ta.pdf)
 
-The English translation lives in the [`book-en/`](book-en/) directory; the Chinese original (the canonical source) lives in [`book/`](book/):
+The Chinese original lives in [`book/`](book/). The English and Tamil translations are **community-contributed** and live in [`book-en/`](book-en/) and [`book-ta/`](book-ta/) respectively; they may lag behind the Chinese original:
 
 - **Source text (English)**: `book-en/introduction.md` (Introduction), `book-en/chapter1.md` ~ `book-en/chapter10.md` (Chapters 1–10), `book-en/afterword.md` (Afterword)
 - **Self-compilation**: After installing pandoc, xelatex, the ElegantBook document class, and related fonts, run

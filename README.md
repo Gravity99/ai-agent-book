@@ -9,9 +9,10 @@
 全书提供中英双语版本：
 
 - **中文 PDF（原版）**：[`book/深入理解-AI-Agent-李博杰-v1.1.pdf`](book/深入理解-AI-Agent-李博杰-v1.1.pdf)
-- **英文 PDF（English translation）**：[`book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf`](book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf)
+- **英文 PDF**（社区贡献翻译，by [@nsdevaraj](https://github.com/nsdevaraj)）：[`book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf`](book-en/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1.pdf)
+- **泰米尔语 PDF**（社区贡献翻译，by [@nsdevaraj](https://github.com/nsdevaraj)）：[`book-ta/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1-ta.pdf`](book-ta/Deep-Understanding-of-AI-Agents-Li-Bojie-v1.1-ta.pdf)
 
-中文正文与编译好的 PDF 位于 [`book/`](book/) 目录，英文翻译位于 [`book-en/`](book-en/) 目录：
+中文正文与编译好的 PDF 位于 [`book/`](book/) 目录；英文与泰米尔语翻译为**社区贡献**，分别位于 [`book-en/`](book-en/) 与 [`book-ta/`](book-ta/) 目录，内容可能滞后于中文原版：
 
 - **正文源码**：`book/introduction.md`（引言）、`book/chapter1.md` ~ `book/chapter10.md`（第一至第十章）、`book/afterword.md`（后记）
 - **自行编译**：安装 pandoc、xelatex、ElegantBook 文档类与相关字体后，运行

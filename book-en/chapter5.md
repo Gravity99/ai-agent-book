@@ -85,7 +85,9 @@ For a Coding Agent, the real engineering challenge of Sessionless is **how the c
 
 Sessionless is not maintenance-free — it means that each user message requires **reloading the complete trajectory and working state**, thus imposing higher demands on state serialization efficiency and trajectory compression strategies; the design principles of trajectory compression itself have been discussed in the "Context Compression Strategies" section of Chapter 2, while this chapter focuses on the engineering trade-offs under the Sessionless architecture.
 
-### The Fatal Triad, Persistent Memory, and Permission StrategyThis "sovereign agent" paradigm also introduces severe security challenges. A Coding Agent has permissions to read and write files, execute commands, and access networks, meaning that once injected with malicious instructions, it could cause irreversible damage. Developer and independent researcher Simon Willison summarized this risk with his famous "Lethal Triad"—when all three elements are present, they form a complete attack loop, putting the system at high risk:
+### The Fatal Triad, Persistent Memory, and Permission Strategy
+
+This "sovereign agent" paradigm also introduces severe security challenges. A Coding Agent has permissions to read and write files, execute commands, and access networks, meaning that once injected with malicious instructions, it could cause irreversible damage. Developer and independent researcher Simon Willison summarized this risk with his famous "Lethal Triad"—when all three elements are present, they form a complete attack loop, putting the system at high risk:
 
 1.  **Access to Private Data** — The Agent can read user files and password managers.
 2.  **Exposure to Untrusted Content** — Processed emails and web pages may contain malicious payloads.
@@ -448,8 +450,8 @@ def cancel_reservation(
 
     if r.cabin_class in ["basic_economy", "economy"]:
         if r.has_insurance:
-            execute_cancellation(reservation_id)```python
-    return {"success": True, "reason": f"{r.cabin_class} with insurance"}
+            execute_cancellation(reservation_id)
+            return {"success": True, "reason": f"{r.cabin_class} with insurance"}
         return {"success": False, "reason": f"{r.cabin_class} requires insurance"}
 
     return {"success": False, "reason": "Does not meet cancellation policy"}
@@ -648,7 +650,9 @@ However, this fully dynamic generation model has high cost and latency, making i
 >
 > **Technical Approach**: Build a basic chatbot application (React frontend + FastAPI backend), with both frontend and backend running in development mode supporting hot reload (React's HMR, FastAPI's reload). Users propose UI customization requirements (colors, fonts, layout, component positions, etc.) during the conversation. The Agent autonomously modifies the code. The hot-reload mechanism automatically detects file changes, the frontend recompiles and refreshes, and the user sees the interface changes in real-time. Supports multiple rounds of iterative customization.
 >
-### Code Creating Code: Agent BootstrappingThe previous sections demonstrated the application of code generation across various domains—from mathematical reasoning to document creation and interface customization. If we push these capabilities to their limits, a natural question arises: Can an Agent use code generation to create another Agent?
+### Code Creating Code: Agent Bootstrapping
+
+The previous sections demonstrated the application of code generation across various domains—from mathematical reasoning to document creation and interface customization. If we push these capabilities to their limits, a natural question arises: Can an Agent use code generation to create another Agent?
 
 First, we need to clarify the division of labor with Chapter 8. This section discusses Agents using code to **repair and create Agents of their own kind**—self-repair, self-replication, and on-demand reproduction of new Agents—with the target being the Agent's code and structure. Chapter 8's "self-evolution" is a different matter, referring to an Agent's ability to continuously grow its capabilities (accumulating experience, optimizing prompts, building a tool library) **without modifying model weights**, with the target being the Agent's knowledge and strategies. Both can be called "evolution," but to avoid confusion with the chapter title of Chapter 8, this section uses **bootstrapping** to refer to this "code-producing-Agent" capability.
 

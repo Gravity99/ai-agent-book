@@ -83,6 +83,8 @@ Intuitively, the higher the utilization, the more non-linearly the wait time inc
 >
 > This experiment demonstrates an important application direction for voice Agents: **Agents can not only have voice conversations with users but also interact with the outside world via phone calls on behalf of the user**. PineClaw's voice Agent is specifically trained to handle hour-long waits, phone menu navigation, and complex negotiations—imagine having an AI wait on hold for a customer service operator for you. These are precisely the scenarios where traditional serial voice pipelines struggle.### Full-Chain Streaming for Cascaded Pipelines
 
+### Full-Chain Streaming of the Cascaded Pipeline
+
 A common misconception needs clarification: the 0.9–2 second latency budget mentioned above assumes a **fully serial** scenario where "each link finishes before passing the baton." However, production systems in 2025 no longer operate this way. The mainstream approach is not to abandon modularity, but to retain the VAD-ASR-LLM-TTS division while making each stage **streaming**, allowing adjacent stages to overlap in time:
 
 - **ASR transcribes while listening**: Using streaming recognition, text is continuously produced while the user is still speaking, without waiting for VAD to determine the end of a sentence before starting transcription.
@@ -467,7 +469,9 @@ Due to the latency of LLM inference, the control frequency of VLA is much lower 
 
 The true divide in action representation is not between RT-2 and OpenVLA, but between **discrete tokens and continuous trajectory generation**. **π₀** represents the latter route: instead of predicting discrete action tokens one by one, it uses flow matching (a continuous generation method with the same origins as diffusion models) to start from random noise and, through multiple iterative "denoising" steps, directly generate a smooth, continuous action trajectory. This representation naturally combines with action chunking and performs better on tasks requiring high precision and smoothness, such as dexterous manipulation. To use an analogy: the discrete token route is like gradually selecting "5 degrees left," "3 cm forward" from a menu; the continuous trajectory route is like an artist first sketching the entire curve and then refining it stroke by stroke.
 
-### Sim2Real Transfer: The Gap from Simulation to RealityChapter 6's simulation environment section has already explained the source of the sim-to-real gap and the principle of domain randomization to address it, so I won't repeat it here. In a nutshell: simulation cannot perfectly replicate real-world physics, visuals, and hardware characteristics. Therefore, during training, these parameters are randomized over a wide range, forcing the policy to learn a general representation that is robust to various changes (Figure 9-12). Below, we focus on how this principle is implemented on a real robotic arm.
+### Sim2Real Transfer: The Gap from Simulation to Reality
+
+Chapter 6's simulation environment section has already explained the source of the sim-to-real gap and the principle of domain randomization to address it, so I won't repeat it here. In a nutshell: simulation cannot perfectly replicate real-world physics, visuals, and hardware characteristics. Therefore, during training, these parameters are randomized over a wide range, forcing the policy to learn a general representation that is robust to various changes (Figure 9-12). Below, we focus on how this principle is implemented on a real robotic arm.
 
 ![Figure 9-12 Sim2Real Gap and Domain Randomization](images/fig9-12.svg)
 
